@@ -11,13 +11,22 @@ const http = require('http');
 // http.createServer(function (requestData, responseData) {});
 
 const server = http.createServer((req, res) => {
+    const url = req.url;
+    if (url === '/') {
+        res.write('<html>');
+        res.write('<head><title>Enter message</title></head>');
+        res.write('<body><form action="/message" method="POST"><input type="text"><button type="submit">Send</button></form></body>')
+        res.write('</html>');
+        res.end();
+        return;
+    }
     // browser know this content type
     res.setHeader('Content-Type', 'text/html');
     res.write('<html>');
     res.write('<head><title>My first page</title></head>');
     res.write('<body><h1>hehehe</h1></body>')
     res.write('</html>');
-    res.end();
+    res.end();    
 });
 
 server.listen(8000);
