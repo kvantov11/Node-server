@@ -11,9 +11,13 @@ const http = require('http');
 // http.createServer(function (requestData, responseData) {});
 
 const server = http.createServer((req, res) => {
-    console.log(`url: ${req.url}\nmethod: ${req.method}\nheaders: ${req.headers}`);
-    // will exit the program? or event loop?
-    process.exit();
+    // browser know this content type
+    res.setHeader('Content-Type', 'text/html');
+    res.write('<html>');
+    res.write('<head><title>My first page</title></head>');
+    res.write('<body><h1>hehehe</h1></body>')
+    res.write('</html>');
+    res.end();
 });
 
 server.listen(8000);
