@@ -2,6 +2,7 @@
 // './http.js' is my file for example
 // http is core module
 const http = require('http');
+const fs = require('fs');
 
 // callback function gets request
 // function requestListener(requestData, responseData) {};
@@ -12,14 +13,24 @@ const http = require('http');
 
 const server = http.createServer((req, res) => {
     const url = req.url;
+    const method = req.method;
     if (url === '/') {
         res.write('<html>');
         res.write('<head><title>Enter message</title></head>');
-        res.write('<body><form action="/message" method="POST"><input type="text"><button type="submit">Send</button></form></body>')
+        res.write('<body><form action="/message" method="POST"><input type="text" name="message"><button type="submit">Send</button></form></body>')
         res.write('</html>');
         res.end();
         return;
     }
+
+    if (url === '/message' && method === 'POST') {
+        fs.writeFileSync('message.txt', 'dummy text');
+        res.statusCode = 302;
+        res.setHeader('Location', '/');
+        res.end();
+        return;
+    }
+
     // browser know this content type
     res.setHeader('Content-Type', 'text/html');
     res.write('<html>');
