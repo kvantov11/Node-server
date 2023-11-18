@@ -47,7 +47,4 @@ const requestHandler = (req, res) => {
 };
 
 // global object, makes this function available in another file
-module.exports = {
-    handler: requestHandler,
-    someText: 'lulw text hardcoded'
-}
+module.exports.handler = requestHandler;
