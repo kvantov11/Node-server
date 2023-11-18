@@ -47,4 +47,4 @@ const requestHandler = (req, res) => {
 };
 
 // global object, makes this function available in another file
-module.exports.handler = requestHandler;
+exports.handler = requestHandler;
