@@ -33,17 +33,19 @@ const server = http.createServer((req, res) => {
         });
 
         // event listener for parsing of incoming request
-        req.on('end', () => {
+        return req.on('end', () => {
             const parsedBody = Buffer.concat(body).toString();
             console.log(parsedBody);
             const message = parsedBody.split('=')[1];
-            fs.writeFileSync('message.txt', message);
+            // writeFileSync blocks the following code until  writeFileSync is done
+            // thr 3rd argument is callback
+            fs.writeFile('message.txt', message, (error) => {
+                res.statusCode = 302;
+                res.setHeader('Location', '/');
+                res.end();
+                return;
+            });    
         });
-
-        res.statusCode = 302;
-        res.setHeader('Location', '/');
-        res.end();
-        return;
     }
 
     // browser know this content type
