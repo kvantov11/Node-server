@@ -17,6 +17,7 @@ const server = http.createServer((req, res) => {
     if (url === '/') {
         res.write('<html>');
         res.write('<head><title>Enter message</title></head>');
+        // input is like a map where message is key and text is value
         res.write('<body><form action="/message" method="POST"><input type="text" name="message"><button type="submit">Send</button></form></body>')
         res.write('</html>');
         res.end();
@@ -24,7 +25,21 @@ const server = http.createServer((req, res) => {
     }
 
     if (url === '/message' && method === 'POST') {
-        fs.writeFileSync('message.txt', 'dummy text');
+        const body = [];
+        // even listener for data
+        req.on('data', (chunk) => {
+            console.log(chunk);
+            body.push(chunk);
+        });
+
+        // event listener for parsing of incoming request
+        req.on('end', () => {
+            const parsedBody = Buffer.concat(body).toString();
+            console.log(parsedBody);
+            const message = parsedBody.split('=')[1];
+            fs.writeFileSync('message.txt', message);
+        });
+
         res.statusCode = 302;
         res.setHeader('Location', '/');
         res.end();
